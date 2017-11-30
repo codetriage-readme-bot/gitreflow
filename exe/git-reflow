@@ -4,6 +4,22 @@ require 'rubygems'
 require 'gli'
 require 'git_reflow'
 
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+end.parse!
+
+p options
+p ARGV
+puts GitReflow.workflow.commands.inspect
+exit 0
+
 include GLI::App
 
 program_desc 'Git Reflow manages your git workflow.'

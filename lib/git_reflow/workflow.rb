@@ -23,6 +23,10 @@ module GitReflow
       include GitReflow::Sandbox
       include GitReflow::GitHelpers
 
+      def commands
+        @@commands ||= {}
+      end
+
       # Creates a singleton method on the inlcuded class
       #
       # This method will take any number of keyword parameters. If @defaults keyword is provided, and the given
@@ -33,8 +37,11 @@ module GitReflow
       # @param defaults [Hash] keyword arguments to provide fallbacks for
       #
       # @yield [a:, b:, c:, ...] Invokes the block with an arbitrary number of keyword arguments
+      #
+      # Needs to support :flags, :switches, :arguments
       def command(name, **params, &block)
         defaults = params[:defaults] || {}
+        self.commands[name] = params
         self.define_singleton_method(name) do |**args|
           args_with_defaults = {}
           args.each do |name, value|
